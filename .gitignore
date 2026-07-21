@@ -1,0 +1,6 @@
+# This public repository contains release documentation only.
+# Upload the macOS app archive as a GitHub Release asset; do not commit it.
+ARIA - Analysis Risk IAM.app/
+*.zip
+aria_policy_rules_*.json
+.DS_Store
