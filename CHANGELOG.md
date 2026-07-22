@@ -19,6 +19,8 @@ Every generated report records its application version, ruleset version, report-
 - Added the aligned Apple Silicon macOS portable package for the `1.2` release.
 - Standardized public platform release names as `ARIA - macOS vX.Y` and
   `ARIA - Windows vX.Y`.
+- Added a public macOS/Windows download chooser and platform-specific launch
+  guidance.
 
 ## 1.1.1 — 2026-07-20
 
