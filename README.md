@@ -9,6 +9,17 @@ The collector makes read-only OCI IAM requests only. ARIA never asks for OCI
 credentials, uploads policy data, or writes JSON, CSV, or temporary collector
 files. Each run creates only `ARIA_<tenancy_name>_<date>_<time>.html`.
 
+## Important disclaimer
+
+ARIA is an independent third-party tool. It is not an Oracle product and is
+not affiliated with, endorsed by, sponsored by, or supported by Oracle or its
+affiliates. It is provided **as is** and **as available**, without warranties.
+You are responsible for validating its output and for every decision or action
+taken based on it. Use ARIA at your own risk and according to your
+organization’s security, legal, and compliance requirements.
+
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+
 ## Choose how to run ARIA
 
 | Option | Best for | Requirements |
