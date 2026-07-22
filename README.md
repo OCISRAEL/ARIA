@@ -19,7 +19,7 @@ file it creates, and upload that file to ARIA for immediate local results.
 
 ### 1. Download ARIA
 
-Download the current macOS archive from this repository's **Releases** page,
+Download **ARIA - macOS v1.2** from this repository's **Releases** page,
 extract it, and keep these two items together:
 
 ```text

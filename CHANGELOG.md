@@ -1,10 +1,9 @@
 # Changelog
 
-ARIA uses [Semantic Versioning](https://semver.org/): `MAJOR.MINOR.PATCH`.
+ARIA uses a two-part version: `MAJOR.MINOR` (`X.Y`).
 
-- Increment **MAJOR** for incompatible report contracts or analysis behavior.
-- Increment **MINOR** for new analysis capabilities, report sections, or notable scoring/ruleset changes.
-- Increment **PATCH** for backward-compatible fixes that do not materially change analysis coverage.
+- Increment **MAJOR** (`X`) for main changes.
+- Increment **MINOR** (`Y`) for smaller bug fixes and updates.
 
 Every generated report records its application version, ruleset version, report-schema version, release date, and this concise release history.
 
@@ -13,6 +12,13 @@ Every generated report records its application version, ruleset version, report-
 - Keep only the current build at `ARIA - Analysis Risk IAM.app` in the project root.
 - Do not retain versioned, `previous`, or `stale` app-bundle copies locally.
 - Record release history here; use Git history for file-level changes.
+- Publish matching platform releases with tags `windows-vX.Y` and `macos-vX.Y`.
+
+## 1.2 — 2026-07-22
+
+- Added the aligned Apple Silicon macOS portable package for the `1.2` release.
+- Standardized public platform release names as `ARIA - macOS vX.Y` and
+  `ARIA - Windows vX.Y`.
 
 ## 1.1.1 — 2026-07-20
 
