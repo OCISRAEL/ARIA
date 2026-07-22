@@ -7,7 +7,7 @@ self-contained HTML report.
 
 The collector makes read-only OCI IAM requests only. ARIA never asks for OCI
 credentials, uploads policy data, or writes JSON, CSV, or temporary collector
-files. Each run creates only `Aria_Report_<tenancy_name>_<date>.html`.
+files. Each run creates only `ARIA_<tenancy_name>_<date>_<time>.html`.
 
 ## Choose how to run ARIA
 
@@ -94,7 +94,10 @@ large tenancy.
 
 Each run creates exactly one static, searchable report:
 
-`Aria_Report_<tenancy_name>_<date>.html`
+`ARIA_<tenancy_name>_<date>_<time>.html`
+
+If a report with that name already exists, ARIA adds `_2`, then `_3`, as
+needed instead of overwriting the earlier report.
 
 The OCI response, normalized policy data, findings, and CSV data are held only
 in memory while ARIA runs. ARIA does not save a JSON export, CSV file, log, or
