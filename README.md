@@ -1,110 +1,104 @@
 # ARIA - Analysis Risk IAM
 
-**Subject:** ARIA - Analysis Risk IAM
+ARIA is one portable Python script for reviewing Oracle Cloud Infrastructure
+(OCI) IAM policies. It uses the OCI CLI already configured in OCI Cloud Shell
+or on your local computer, analyzes policy statements locally, and creates one
+self-contained HTML report.
 
-ARIA is an offline macOS and Windows application for reviewing Oracle Cloud
-Infrastructure (OCI) IAM policies. It collects no credentials and does not
-send data to OCI. Run the included read-only exporter in OCI Cloud Shell, then
-upload its JSON output to ARIA for immediate local results.
+The collector makes read-only OCI IAM requests only. ARIA never asks for OCI
+credentials, uploads policy data, or writes JSON, CSV, or temporary collector
+files. Each run creates only `Aria_Report_<tenancy_name>_<date>.html`.
 
-## Download ARIA v1.2
+## Choose how to run ARIA
 
-Choose your platform, download the ZIP, and extract it before opening ARIA.
-
-| Platform | Requirements | Download |
+| Option | Best for | Requirements |
 | --- | --- | --- |
-| macOS | Apple Silicon (`arm64`), macOS 26 or later | [Download ARIA for macOS](https://github.com/OCISRAEL/ARIA/releases/download/macos-v1.2/ARIA-1.2-macos-arm64.zip) |
-| Windows | 64-bit Windows | [Download ARIA for Windows](https://github.com/OCISRAEL/ARIA/releases/download/windows-v1.2/ARIA-Analysis-Risk-IAM-1.2-windows-x64.zip) |
-
-You also need the read-only [OCI exporter script](aria_rule_exporter.sh) to
-create the policy JSON that ARIA analyzes.
+| [OCI Cloud Shell](#option-1--run-in-oci-cloud-shell) | No local installation | OCI Console access and IAM read permission |
+| [Local computer](#option-2--run-locally-with-oci-cli) | Repeated use or local workflow | Python 3.11+ and configured OCI CLI |
 
 ## Before you start
 
-- **OCI access:** You need permission to inspect compartments and policies in
-  the tenancy. The exporter reads data only; it never changes OCI resources.
-- **Home region:** Before opening Cloud Shell, switch the OCI Console to your
-  tenancy's **home region**.
+- Use an OCI identity that can list compartments and IAM policies.
+- In OCI Console, switch to the tenancy's **home region** before opening Cloud Shell.
+- Download [aria.py](aria.py). It is the only ARIA file you need.
 
-## Simple procedure
+## Option 1 — Run in OCI Cloud Shell
 
-### 1. Download ARIA
+1. In the OCI Console home region, open **Cloud Shell**.
 
-Choose the macOS or Windows download above and extract the ZIP. Download
-`aria_rule_exporter.sh` from this repository as well.
+2. From the Cloud Shell menu, select **Upload**, then upload `aria.py`.
 
-```text
-macOS:   ARIA - Analysis Risk IAM.app
-Windows: ARIA - Analysis Risk IAM.exe
-aria_rule_exporter.sh
-```
+   ![Cloud Shell Upload menu](assets/cloud-shell-upload-sanitized.png)
 
-### 2. Upload the exporter to OCI Cloud Shell
+3. Check the installed Python 3.11 interpreter and validate the OCI CLI
+   configuration. This does not call OCI or create a report.
 
-In OCI Console, confirm that you are in your tenancy's **home region**, then
-open **Cloud Shell**.
+   ```bash
+   python3.11 --version
+   python3.11 aria.py --dry-run
+   ```
 
-From the Cloud Shell menu in the top-right corner, select **Upload**. Drag
-`aria_rule_exporter.sh` into the upload area and complete the upload.
+4. Run ARIA. It shows progress while it reads tenancy, compartment, and policy
+   information. A large tenancy can take a few minutes.
 
-User and tenancy names are masked in this example:
+   ```bash
+   python3.11 aria.py
+   ```
 
-![Cloud Shell Upload menu with user and tenancy names masked](assets/cloud-shell-upload-sanitized.png)
+   For a larger tenancy, use up to four concurrent policy requests:
 
-### 3. Generate the policy export
+   ```bash
+   python3.11 aria.py --workers 4
+   ```
 
-In the Cloud Shell terminal, run:
+5. When ARIA prints the report filename, use the Cloud Shell menu’s
+   **Download** action and enter that exact `.html` filename.
 
-```bash
-chmod +x aria_rule_exporter.sh
-./aria_rule_exporter.sh
-```
+   ![Cloud Shell Download dialog](assets/cloud-shell-download-sanitized.png)
 
-The script scans the tenancy and accessible active compartments using only
-read-only OCI IAM commands. It writes a JSON file in your Cloud Shell home
-directory with a name similar to:
+6. Open the downloaded HTML report in any modern browser.
 
-```text
-aria_policy_rules_<tenancy-name>.json
-```
+## Option 2 — Run locally with OCI CLI
 
-If the script reports inaccessible compartments, the JSON is still created,
-but its `errors` section identifies the incomplete coverage.
+This option assumes that OCI CLI is already installed and configured on your
+computer.
 
-### 4. Download the JSON file
+1. Download [aria.py](aria.py) to a local folder.
 
-Open the Cloud Shell menu again and choose **Download**. Enter the JSON
-filename shown by the exporter, then select **Download**.
+2. Verify Python 3.11+ and your OCI CLI profile without calling OCI:
 
-The tenancy-specific part of the filename is intentionally masked in this
-example:
+   ```bash
+   python3.11 --version
+   python3.11 aria.py --dry-run
+   ```
 
-![Cloud Shell download dialog with tenancy name masked](assets/cloud-shell-download-sanitized.png)
+3. Run the review. The report is created in the current folder:
 
-### 5. Analyze the export in ARIA
+   ```bash
+   python3.11 aria.py
+   ```
 
-Open `ARIA - Analysis Risk IAM.app` on macOS or
-`ARIA - Analysis Risk IAM.exe` on Windows. Select **Upload JSON**, choose the
-downloaded JSON file, then select **Run Analysis**. ARIA immediately creates an
-HTML report and JSON/CSV results in a timestamped local output folder.
+4. For a non-default OCI CLI profile or an explicit report folder:
+
+   ```bash
+   python3.11 aria.py --profile my-profile --output-dir ./aria-output
+   ```
+
+If OCI reports request throttling, retry with `--workers 1`. The default is
+two concurrent policy requests; `--workers 4` is appropriate for an unusually
+large tenancy.
 
 <!-- PRODUCT_CONTENT:START -->
 
 ## Output
 
-Each run creates a user-writable folder named
-`aria-review-YYYYMMDD-HHMMSS`. It contains:
+Each run creates exactly one static, searchable report:
 
-- `report.html` — static, searchable results suitable for local viewing
-- `findings.json` — the complete generic analysis export
-- `findings.csv` — a flat findings table
-- `normalized_statements.json` — normalized and parsed source statements
-- `aria_run.log` — run and validation notes
-- `summary.md` — concise executive summary when Markdown output is enabled
+`Aria_Report_<tenancy_name>_<date>.html`
 
-`findings.json` retains full source values for validation and automation. The
-HTML view masks long OCIDs in summary displays while retaining evidence in
-expandable details.
+The OCI response, normalized policy data, findings, and CSV data are held only
+in memory while ARIA runs. ARIA does not save a JSON export, CSV file, log, or
+intermediate folder.
 
 ## What ARIA analyzes
 
@@ -136,20 +130,13 @@ design.
 
 ## Security and privacy
 
-- The exporter uses Cloud Shell's existing OCI CLI session. It does not need
-  API keys, passwords, Python, or local installation.
-- The generated JSON can contain tenancy and policy information. Treat it as
-  sensitive: do not commit it to Git or upload it to a public repository.
-- ARIA works locally. It does not upload the JSON file or connect to OCI.
+- ARIA uses only your existing OCI CLI session and read-only IAM requests.
+- The HTML report can contain tenancy and IAM policy information. Store and
+  share it according to your organization’s security policy.
+- ARIA does not inspect live group membership, audit events, resource state,
+  or prove reachability. It is a policy-review aid, not a replacement for a
+  human IAM review.
 
-## Platform security notes
+## Version history
 
-- **macOS:** The build is locally signed but not yet signed with an Apple
-  Developer ID or notarized. Gatekeeper may show a warning for
-  browser-downloaded copies.
-- **Windows:** The initial portable build is unsigned. Windows SmartScreen may
-  show a warning for browser-downloaded copies.
-
-## Release history
-
-See [CHANGELOG.md](CHANGELOG.md) for application version history.
+See [CHANGELOG.md](CHANGELOG.md).
