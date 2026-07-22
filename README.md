@@ -88,6 +88,52 @@ Open `ARIA - Analysis Risk IAM.app` on macOS or
 downloaded JSON file, then select **Run Analysis**. ARIA immediately creates an
 HTML report and JSON/CSV results in a timestamped local output folder.
 
+<!-- PRODUCT_CONTENT:START -->
+
+## Output
+
+Each run creates a user-writable folder named
+`aria-review-YYYYMMDD-HHMMSS`. It contains:
+
+- `report.html` — static, searchable results suitable for local viewing
+- `findings.json` — the complete generic analysis export
+- `findings.csv` — a flat findings table
+- `normalized_statements.json` — normalized and parsed source statements
+- `aria_run.log` — run and validation notes
+- `summary.md` — concise executive summary when Markdown output is enabled
+
+`findings.json` retains full source values for validation and automation. The
+HTML view masks long OCIDs in summary displays while retaining evidence in
+expandable details.
+
+## What ARIA analyzes
+
+The analyzer recognizes standard `Allow`, cross-tenancy `Define`, `Endorse`,
+and `Admit` statements; groups, dynamic groups, services, `any-user`, custom
+permission sets, compartment names/IDs/paths, and common `where` conditions.
+It reviews broad subjects, powerful verbs, sensitive resource families,
+tenancy and inherited scope, cross-tenancy trust, service/workload identities,
+policy hygiene, parser uncertainty, and scan completeness.
+
+Scores range from 0 to 100:
+
+| Score | Severity |
+|---:|---|
+| 85–100 | Critical |
+| 65–84 | High |
+| 40–64 | Medium |
+| 20–39 | Low |
+| 0–19 | Info |
+
+Read a finding’s evidence, confidence, effective scope, and remediation
+together. Individual findings use their own severity; the headline posture is
+a light policy-weighted score, so a single rule does not define the entire
+tenancy. It is not proof of malicious activity. Low hierarchy confidence or
+an unparsed statement should prompt manual validation against the intended OCI
+design.
+
+<!-- PRODUCT_CONTENT:END -->
+
 ## Security and privacy
 
 - The exporter uses Cloud Shell's existing OCI CLI session. It does not need

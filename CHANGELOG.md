@@ -21,6 +21,8 @@ Every generated report records its application version, ruleset version, report-
   `ARIA - Windows vX.Y`.
 - Added a public macOS/Windows download chooser and platform-specific launch
   guidance.
+- Added synchronized public documentation for ARIA output files and analysis
+  capabilities.
 
 ## 1.1.1 — 2026-07-20
 
