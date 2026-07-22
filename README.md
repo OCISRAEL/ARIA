@@ -30,11 +30,9 @@ files. Each run creates only `ARIA_<tenancy_name>_<date>_<time>.html`.
 
    ![Cloud Shell Upload menu](assets/cloud-shell-upload-sanitized.png)
 
-3. Check the installed Python 3.11 interpreter and validate the OCI CLI
-   configuration. This does not call OCI or create a report.
+3. Validate the OCI CLI profile. This does not call OCI or create a report.
 
    ```bash
-   python3.11 --version
    python3.11 aria.py --dry-run
    ```
 
@@ -54,7 +52,7 @@ files. Each run creates only `ARIA_<tenancy_name>_<date>_<time>.html`.
 5. When ARIA prints the report filename, use the Cloud Shell menu’s
    **Download** action and enter that exact `.html` filename.
 
-   ![Cloud Shell Download dialog](assets/cloud-shell-download-sanitized.png)
+   ![Cloud Shell Download dialog](assets/cloud-shell-download-aria-sanitized.png)
 
 6. Open the downloaded HTML report in any modern browser.
 
@@ -65,10 +63,9 @@ computer.
 
 1. Download [aria.py](aria.py) to a local folder.
 
-2. Verify Python 3.11+ and your OCI CLI profile without calling OCI:
+2. Verify your OCI CLI profile without calling OCI:
 
    ```bash
-   python3.11 --version
    python3.11 aria.py --dry-run
    ```
 
