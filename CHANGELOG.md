@@ -3,11 +3,6 @@
 ARIA uses `MAJOR.MINOR` versions (`X.Y`): increment `X` for main changes and
 `Y` for smaller fixes or updates.
 
-## Unreleased
-
-- Development changes are recorded here first, then mirrored to the public
-  repository by `aria sync`.
-
 ## 1.0 — 2026-07-22
 
 - First script-only ARIA release.
